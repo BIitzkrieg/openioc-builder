@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 def printIOCHeader(f):
-    #had to specify coding as UTF-8 for fire eye to understand it
+    # had to specify coding as UTF-8 for fire eye to understand it
     f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
     f.write(
         '<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="' + f.name.rstrip(
@@ -29,63 +29,70 @@ def printIOCFooter(f):
 
 
 def sha256TermPopulate(line, f):
-    #for line in fileinput.input(inputfile):
+    # for line in fileinput.input(inputfile):
     f.write('\t\t\t<IndicatorItem id="' + str(
         uuid.uuid4()) + '" condition="is">\n\t\t\t\t<Context document="FileItem" search="FileItem/Sha256sum" type="mir" />\n\t\t\t\t<Content type="string">' + line.rstrip() +
-'</Content>\n\t\t\t</IndicatorItem>\n')
+            '</Content>\n\t\t\t</IndicatorItem>\n')
 
 
 def sha1TermPopulate(line, f):
-    #for line in fileinput.input(inputfile):
+    # for line in fileinput.input(inputfile):
     f.write('\t\t\t<IndicatorItem id="' + str(
         uuid.uuid4()) + '" condition="is">\n\t\t\t\t<Context document="FileItem" search="FileItem/Sha1sum" type="mir" />\n\t\t\t\t<Content type="string">' + line.rstrip() +
-'</Content>\n\t\t\t</IndicatorItem>\n')
+            '</Content>\n\t\t\t</IndicatorItem>\n')
 
 
 def md5TermPopulate(line, f):
-    #for line in fileinput.input(inputfile):
+    # for line in fileinput.input(inputfile):
     f.write('\t\t\t<IndicatorItem id="' + str(
         uuid.uuid4()) + '" condition="is">\n\t\t\t\t<Context document="FileItem" search="FileItem/Md5sum" type="mir" />\n\t\t\t\t<Content type="md5">' + line.rstrip() +
-'</Content>\n\t\t\t</IndicatorItem>\n')
+            '</Content>\n\t\t\t</IndicatorItem>\n')
+
 
 # Changed to DnsEntryItem from Network and Network/DNS to DnsEntryItem/Host for HX support
 def domainTermPopulate(line, f):
-    #for line in fileinput.input(inputfile):
+    # for line in fileinput.input(inputfile):
     f.write('\t\t\t<IndicatorItem id="' + str(
         uuid.uuid4()) + '" condition="contains">\n\t\t\t\t<Context document="DnsEntryItem" search="DnsEntryItem/Host" type="mir" />\n\t\t\t\t<Content type="string">' + line.rstrip() +
-'</Content>\n\t\t\t</IndicatorItem>\n')
+            '</Content>\n\t\t\t</IndicatorItem>\n')
 
 
 def ipTermPopulate(line, f):
-    #for line in fileinput.input(inputfile):
+    # for line in fileinput.input(inputfile):
     f.write('\t\t\t<IndicatorItem id="' + str(
         uuid.uuid4()) + '" condition="is">\n\t\t\t\t<Context document="PortItem" search="PortItem/remoteIP" type="mir" />\n\t\t\t\t<Content type="IP">' + line.rstrip() +
-'</Content>\n\t\t\t</IndicatorItem>\n')
+            '</Content>\n\t\t\t</IndicatorItem>\n')
 
 
 def fileTermPopulate(line, f):
     f.write('\t\t\t<IndicatorItem id="' + str(
         uuid.uuid4()) + '" condition="contains">\n\t\t\t\t<Context document="FileItem" search="FileItem/FullPath" type="mir" />\n\t\t\t\t<Content type="string">' + line.rstrip() +
-'</Content>\n\t\t\t</IndicatorItem>\n')
+            '</Content>\n\t\t\t</IndicatorItem>\n')
 
 
 def regTermPopulate(line, f):
     f.write('\t\t\t<IndicatorItem id="' + str(
         uuid.uuid4()) + '" condition="contains">\n\t\t\t\t<Context document="RegistryItem" search="RegistryItem/Path" type="mir" />\n\t\t\t\t<Content type="string">' + line.rstrip() +
-'</Content>\n\t\t\t</IndicatorItem>\n')
+            '</Content>\n\t\t\t</IndicatorItem>\n')
 
-def emailTermPopulate(line,f):
-    f.write('\t\t\t<IndicatorItem id="'+str(uuid.uuid4())+'" condition="contains">\n\t\t\t\t<Context document="Email" search="Email/From" type="mir" />\n\t\t\t\t<Content type="string">'+
+
+def emailTermPopulate(line, f):
+    f.write('\t\t\t<IndicatorItem id="' + str(
+        uuid.uuid4()) + '" condition="contains">\n\t\t\t\t<Context document="Email" search="Email/From" type="mir" />\n\t\t\t\t<Content type="string">' +
+            line.rstrip() + '</Content>\n\t\t\t\t</IndicatorItem>\n')
+
+def urlTermPopulate(line,f):
+    f.write('\t\t\t<IndicatorItem id="'+str(uuid.uuid4())+'" condition="contains">\n\t\t\t\t<Context document="UrlHistoryItem" search="UrlHistoryItem/URL" type="endpoint" />\n\t\t\t\t<Content type="string">'+
 line.rstrip() + '</Content>\n\t\t\t\t</IndicatorItem>\n')
 
 
 def main():
-    #parser = optparse.OptionParser('usage %prog -f <input file>')
-    #parser.add_option('-f', dest='tgtFile', type='string', help='specify input file')
-    #(options, args) = parser.parse_args()
-    #inputfile = options.tgtFile
-    
-    #just reading from working directory for Jupyter
+    # parser = optparse.OptionParser('usage %prog -f <input file>')
+    # parser.add_option('-f', dest='tgtFile', type='string', help='specify input file')
+    # (options, args) = parser.parse_args()
+    # inputfile = options.tgtFile
+
+    # just reading from working directory for Jupyter
     inputfile = "ioc.csv"
     if inputfile == None:
         print(parser.usage)
@@ -110,15 +117,15 @@ def main():
                             sha1TermPopulate(term.group(0), f)
                         if len(term.group(0)) == 32:
                             md5TermPopulate(term.group(0), f)
-                        #print "sha256/1/md5ioc - " + term.group(0)
-                if re.search('^[a-zA-Z0-9._%-]+@[a-zA-Z0-9._%-]+.[a-zA-Z]{2,6}$',line):
-                    term = re.search('^[a-zA-Z0-9._%-]+@[a-zA-Z0-9._%-]+.[a-zA-Z]{2,6}$',line)
+                        # print "sha256/1/md5ioc - " + term.group(0)
+                if re.search('^[a-zA-Z0-9._%-]+@[a-zA-Z0-9._%-]+.[a-zA-Z]{2,6}$', line):
+                    term = re.search('^[a-zA-Z0-9._%-]+@[a-zA-Z0-9._%-]+.[a-zA-Z]{2,6}$', line)
                     if term.group(0) not in termlist:
                         termlist.append(term.group(0))
-                        emailTermPopulate(term.group(0),f)
+                        emailTermPopulate(term.group(0), f)
                 if re.search('\\\\[a-zA-Z0-9]', line) and not re.search('HKLM', line) and not re.search('HKEY',
                                                                                                         line) and not re.search(
-                        'HKCU', line) and not re.search('SYSTEM', line):
+                    'HKCU', line) and not re.search('SYSTEM', line):
                     termssplit = line.split(' ')
                     for termssplits in termssplit:
                         if re.search('\\\\[a-zA-Z0-9]', termssplits):
@@ -127,46 +134,57 @@ def main():
                     if term not in termlist:
                         termlist.append(term)
                         fileTermPopulate(term, f)
-                    #print "fileioc - " + term
+                    # print "fileioc - " + term
                 if re.search('HKLM', line) or re.search('HKCU', line) or re.search('HKEY', line) or re.search('SYSTEM',
                                                                                                               line):
                     termssplit = line.split(' ')
                     for termssplits in termssplit:
                         if re.search('HKLM', termssplits) or re.search('HKCU', termssplits) or re.search('HKEY',
                                                                                                          termssplits) or re.search(
-                                'SYSTEM', termssplits):
+                            'SYSTEM', termssplits):
                             term = termssplits
                             term = re.sub('HKLM\\\\|HKCU\\\\|hklm\\\\\|hkcu\\\\|SYSTEM\\\\|system\\\\', '', term)
                     if term not in termlist:
                         termlist.append(term)
                         regTermPopulate(term, f)
-                    #print "regioc - " + term
+                    # print "regioc - " + term
                 if re.search('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', line):
                     term = re.search('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', line)
                     if term.group(0) not in termlist:
                         termlist.append(term.group(0))
                         ipTermPopulate(term.group(0), f)
-                    #print "ipIOC - " + term.group(0)
+                    # print "ipIOC - " + term.group(0)
                 if re.search('[a-zA-Z0-9\-]{2,63}(\.[a-zA-Z0-9\-]{2,63}).', line) and not re.search('.exe', line,
-                                                                                                re.IGNORECASE) and not re.search(
-                        '.dll', line, re.IGNORECASE) and not re.search('.pdf', line, re.IGNORECASE) and not re.search(
-                        '.doc', line, re.IGNORECASE):
+                                                                                                    re.IGNORECASE) and not re.search(
+                    '.dll', line, re.IGNORECASE) and not re.search('.pdf', line, re.IGNORECASE) and not re.search(
+                    '.doc', line, re.IGNORECASE):
                     term = re.search('[a-zA-Z0-9\-]{2,63}(\.[a-zA-Z0-9\-]{2,63}).', line)
                     termssplit = line.split(' ')
 
                     for termssplits in termssplit:
                         if not re.search('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', termssplits):
-                            if re.search('[a-zA-Z0-9\-]{2,63}(\.[a-zA-Z0-9\-]{2,63}).', termssplits):
-                                #Need a check right here to look for characters that break IOC editor from being able to load the file. Like '&'
-                                #Fix could be to replace '&' chars with '&amp;' if we're ever going to care about such things.
-                                #Reason: The following string broke ioc editor: '/fc.asp?est=&hn=Tfic~%20&ha='
-                                #re.search matched against 'fc.as' :(
+                            #original regex, changed to below
+                            # if re.search('[a-zA-Z0-9\-]{2,63}(\.[a-zA-Z0-9\-]{2,63}).', termssplits):
+                            #Domaim
+                            if re.search('^(?!:\/\/)([a-zA-Z0-9-_]+\.)*[a-zA-Z0-9][a-zA-Z0-9-_]+\.[a-zA-Z]{2,11}?$',
+                                         termssplits):
+                                # Need a check right here to look for characters that break IOC editor from being able to load the file. Like '&'
+                                # Fix could be to replace '&' chars with '&amp;' if we're ever going to care about such things.
+                                # Reason: The following string broke ioc editor: '/fc.asp?est=&hn=Tfic~%20&ha='
+                                # re.search matched against 'fc.as' :(
                                 thisterm = termssplits
                                 thisterm = thisterm.rstrip('.')
                                 if thisterm not in termlist:
                                     termlist.append(thisterm)
                                     domainTermPopulate(thisterm, f)
-                                    #print "domainIOC - " + thisterm
+                                    # print "domainIOC - " + thisterm
+                            #URL
+                            elif re.search('(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})', termssplits):
+                                thisterm = termssplits
+                                thisterm = thisterm.rstrip('.')
+                                if thisterm not in termlist:
+                                    termlist.append(thisterm)
+                                    urlTermPopulate(thisterm, f)
 
             printIOCFooter(f)
             f.close()
